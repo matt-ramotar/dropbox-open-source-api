@@ -22,7 +22,7 @@ class RepositoryController {
     };
 
     try {
-      const response = await Repository.paginate(null, options);
+      const response = await Repository.paginate({ isPublic: true }, options);
       return res.json(response);
     } catch (error) {
       return res.json([]);
