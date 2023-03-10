@@ -4,6 +4,8 @@ class RepositoryController {
   paging = async (req, res) => {
     const { pageId, limit } = req.body;
 
+    console.log(pageId, limit);
+
     const options = {
       limit: limit ?? 20,
       sort: {
@@ -20,7 +22,8 @@ class RepositoryController {
     };
 
     try {
-      return await Repository.paginate(null, options);
+      const response = await Repository.paginate(null, options);
+      return res.json(response);
     } catch (error) {
       return res.json([]);
     }
