@@ -1,4 +1,6 @@
 const { Repository } = require('../models');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.SchemaTypes.ObjectId;
 
 class RepositoryController {
   paging = async (req, res) => {
@@ -52,6 +54,13 @@ class RepositoryController {
     }, {});
 
     return res.json(Object.values(resultObject));
+  };
+
+  searchByTag = async (req, res) => {
+    const tagId = req.body.tagId;
+
+    const matches = await Repository.find({ tags: tagId });
+    return res.json(matches);
   };
 }
 
