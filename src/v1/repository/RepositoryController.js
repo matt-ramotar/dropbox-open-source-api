@@ -30,9 +30,18 @@ class RepositoryController {
   };
 
   search = async (req, res) => {
-    const namePartialMatches = await Repository.find({ name: { $regex: req.body.searchInput, $options: 'i' } });
-    const descriptionPartialmatches = await Repository.find({ description: { $regex: req.body.searchInput, $options: 'i' } });
-    const fullTextMatches = await Repository.find({ $text: { $search: req.body.searchInput, $caseSensitive: false, $diacriticSensitive: true } });
+    const namePartialMatches = await Repository.find({ name: { $regex: req.body.searchInput, $options: 'i' } })
+      .populate('contributors')
+      .populate('languages')
+      .populate('tags');
+    const descriptionPartialmatches = await Repository.find({ description: { $regex: req.body.searchInput, $options: 'i' } })
+      .populate('contributors')
+      .populate('languages')
+      .populate('tags');
+    const fullTextMatches = await Repository.find({ $text: { $search: req.body.searchInput, $caseSensitive: false, $diacriticSensitive: true } })
+      .populate('contributors')
+      .populate('languages')
+      .populate('tags');
 
     const resultObject = [...namePartialMatches, ...descriptionPartialmatches, ...fullTextMatches].reduce((acc, repository) => {
       acc[repository._id] = repository;
