@@ -28,6 +28,19 @@ class RepositoryController {
       return res.json([]);
     }
   };
+
+  search = async (req, res) => {
+    const namePartialMatches = await Repository.find({ name: { $regex: req.body.searchInput, $options: 'i' } });
+    const descriptionPartialmatches = await Repository.find({ description: { $regex: req.body.searchInput, $options: 'i' } });
+    const fullTextMatches = await Repository.find({ $text: { $search: req.body.searchInput, $caseSensitive: false, $diacriticSensitive: true } });
+
+    const resultObject = [...namePartialMatches, ...descriptionPartialmatches, ...fullTextMatches].reduce((acc, repository) => {
+      acc[repository._id] = repository;
+      return acc;
+    }, {});
+
+    return res.json(Object.values(resultObject));
+  };
 }
 
 module.exports = RepositoryController;

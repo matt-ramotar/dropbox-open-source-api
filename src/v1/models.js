@@ -27,6 +27,8 @@ const repositorySchema = new Schema(
   { timestamps: true },
 );
 repositorySchema.plugin(paginate);
+repositorySchema.index({ '$**': 'text' });
+
 const Repository = model('Repository', repositorySchema);
 
 const ownerSchema = new Schema({
