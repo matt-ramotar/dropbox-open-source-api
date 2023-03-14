@@ -62,6 +62,13 @@ class RepositoryController {
     const matches = await Repository.find({ tags: tagId });
     return res.json(matches);
   };
+
+  searchByLanguage = async (req, res) => {
+    const languageId = req.body.languageId;
+
+    const matches = await Repository.find({ languages: languageId });
+    return res.json(matches);
+  };
 }
 
 module.exports = RepositoryController;
