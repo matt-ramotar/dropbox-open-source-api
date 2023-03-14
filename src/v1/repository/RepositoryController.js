@@ -30,15 +30,18 @@ class RepositoryController {
   };
 
   search = async (req, res) => {
-    const namePartialMatches = await Repository.find({ name: { $regex: req.body.searchInput, $options: 'i' } })
+    const namePartialMatches = await Repository.find({ name: { $regex: req.body.searchInput, $options: 'i' }, isPublic: true })
       .populate('contributors')
       .populate('languages')
       .populate('tags');
-    const descriptionPartialmatches = await Repository.find({ description: { $regex: req.body.searchInput, $options: 'i' } })
+    const descriptionPartialmatches = await Repository.find({ description: { $regex: req.body.searchInput, $options: 'i' }, isPublic: true })
       .populate('contributors')
       .populate('languages')
       .populate('tags');
-    const fullTextMatches = await Repository.find({ $text: { $search: req.body.searchInput, $caseSensitive: false, $diacriticSensitive: true } })
+    const fullTextMatches = await Repository.find({
+      $text: { $search: req.body.searchInput, $caseSensitive: false, $diacriticSensitive: true },
+      isPublic: true,
+    })
       .populate('contributors')
       .populate('languages')
       .populate('tags');
